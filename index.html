@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hydration Habit Builder — Depths to Heights</title>
+    <meta name="description" content="Gamified daily water intake tracking with personalized goals, biblical wisdom, and gentle accountability. Build healthy hydration habits with reflective pacing and encouraging reminders.">
+    
+    <style>
+        /* STYLE PACK: Ocean Depths — deep ocean blues and pearl whites; flowing serif headings + clean sans body; wave motion patterns */
+        :root {
+            --ocean-deep: #0f3460;
+            --ocean-mid: #1e5f8b;
+            --ocean-light: #4a90a4;
+            --wave-foam: #87ceeb;
+            --pearl-white: #f8f9fa;
+            --pearl-cream: #f1f3f4;
+            --coral-accent: #ff6b6b;
+            --seaweed-green: #20bf6b;
+            --text-deep: #0d1421;
+            --shadow-wave: rgba(15, 52, 96, 0.2);
+            
+            --font-serif: 'Times New Roman', Georgia, serif;
+            --font-sans: system-ui, -apple-system, sans-serif;
+            
+            --motion-speed: 250ms;
+            --motion-easing: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            color: var(--text-deep);
+            background: linear-gradient(180deg, var(--pearl-white) 0%, var(--pearl-cream) 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--ocean-deep) 0%, var(--ocean-mid) 100%);
+            color: var(--pearl-white);
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 20px var(--shadow-wave);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .brand {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        /* Hook Section */
+        .hook-section {
+            background: linear-gradient(135deg, var(--ocean-light) 0%, var(--ocean-mid) 100%);
+            color: var(--pearl-white);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .hook-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: bold;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+        
+        /* Buttons */
+        .btn {
+            background: var(--ocean-deep);
+            color: var(--pearl-white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all var(--motion-speed) var(--motion-easing);
+            box-shadow: 0 4px 12px var(--shadow-wave);
+            font-family: var(--font-sans);
+        }
+        
+        .btn:hover, .btn:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-wave);
+            background: var(--ocean-light);
+        }
+        
+        .btn-primary {
+            background: var(--coral-accent);
+            font-size: 1.2rem;
+            padding: 1rem 2rem;
+        }
+        
+        .btn-primary:hover {
+            background: #ff5252;
+        }
+        
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Sections */
+        .section {
+            background: var(--pearl-white);
+            margin: 2rem 0;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px var(--shadow-wave);
+            border: 1px solid rgba(74, 144, 164, 0.1);
+        }
+        
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            color: var(--ocean-deep);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        /* Water Level Display */
+        .water-level-container {
+            background: var(--ocean-deep);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .water-level {
+            position: relative;
+            width: 200px;
+            height: 300px;
+            margin: 0 auto;
+            border: 4px solid var(--pearl-white);
+            border-radius: 100px;
+            background: linear-gradient(180deg, var(--pearl-cream) 0%, var(--pearl-white) 100%);
+            overflow: hidden;
+        }
+        
+        .water-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(180deg, var(--wave-foam) 0%, var(--ocean-light) 100%);
+            transition: height 1s var(--motion-easing);
+            border-radius: 0 0 96px 96px;
+            height: 0%;
+        }
+        
+        .water-stats {
+            color: var(--pearl-white);
+            margin-top: 1rem;
+        }
+        
+        .water-percentage {
+            font-size: 3rem;
+            font-weight: bold;
+            font-family: var(--font-serif);
+        }
+        
+        .water-amount {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        /* Goal Setting */
+        .goal-setting {
+            background: var(--pearl-cream);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+        
+        .goal-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .goal-option {
+            background: var(--pearl-white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all var(--motion-speed) var(--motion-easing);
+            text-align: center;
+        }
+        
+        .goal-option:hover {
+            border-color: var(--ocean-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px var(--shadow-wave);
+        }
+        
+        .goal-option.selected {
+            border-color: var(--coral-accent);
+            background: rgba(255, 107, 107, 0.1);
+        }
+        
+        .goal-title {
+            font-family: var(--font-serif);
+            color: var(--ocean-deep);
+            margin-bottom: 0.5rem;
+        }
+        
+        .goal-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--ocean-light);
+        }
+        
+        /* Quick Add Buttons */
+        .quick-add {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .quick-add-btn {
+            background: linear-gradient(135deg, var(--ocean-light), var(--ocean-mid));
+            color: var(--pearl-white);
+            border: none;
+            padding: 2rem 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all var(--motion-speed) var(--motion-easing);
+            text-align: center;
+        }
+        
+        .quick-add-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px var(--shadow-wave);
+        }
+        
+        .quick-add-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .quick-add-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            display: block;
+            margin-top: 0.5rem;
+        }
+        
+        /* Progress Tracking */
+        .progress-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--pearl-white), var(--pearl-cream));
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(74, 144, 164, 0.1);
+            transition: all var(--motion-speed) var(--motion-easing);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-wave);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--ocean-deep);
+            font-family: var(--font-serif);
+        }
+        
+        .stat-label {
+            color: var(--ocean-mid);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* History Chart */
+        .chart-container {
+            background: var(--pearl-cream);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+        
+        .chart {
+            display: flex;
+            align-items: end;
+            justify-content: space-around;
+            height: 200px;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .chart-bar {
+            background: linear-gradient(180deg, var(--wave-foam), var(--ocean-light));
+            min-width: 25px;
+            border-radius: 8px 8px 0 0;
+            transition: all var(--motion-speed) var(--motion-easing);
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .chart-bar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px var(--shadow-wave);
+        }
+        
+        .chart-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: var(--text-deep);
+        }
+        
+        /* Journal */
+        .journal-section {
+            background: var(--pearl-cream);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+        
+        .journal-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 2px solid var(--ocean-light);
+            border-radius: 10px;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            line-height: 1.6;
+            resize: vertical;
+        }
+        
+        .journal-textarea:focus {
+            outline: none;
+            border-color: var(--coral-accent);
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.2);
+        }
+        
+        /* Reminder Banner */
+        .reminder-banner {
+            background: linear-gradient(135deg, var(--coral-accent), #ff5252);
+            color: var(--pearl-white);
+            padding: 1rem;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            transform: translateY(-100%);
+            transition: transform var(--motion-speed) var(--motion-easing);
+            box-shadow: 0 4px 15px var(--shadow-wave);
+        }
+        
+        .reminder-banner.show {
+            transform: translateY(0);
+        }
+        
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--ocean-deep) 0%, var(--ocean-mid) 100%);
+            color: var(--pearl-white);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        .donation-note {
+            background: rgba(248, 249, 250, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: center;
+            border: 2px solid rgba(135, 206, 235, 0.3);
+        }
+        
+        .paypal-link {
+            color: var(--wave-foam);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .paypal-link:hover {
+            color: var(--pearl-white);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hook-section {
+                padding: 3rem 1rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .water-level {
+                width: 150px;
+                height: 225px;
+            }
+            
+            .goal-options,
+            .quick-add {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+        
+        /* Reading Mode */
+        body.reading-mode {
+            font-size: 112%;
+            line-height: 1.8;
+        }
+        
+        body.reading-mode .container {
+            max-width: 70ch;
+        }
+        
+        /* High Contrast */
+        body.high-contrast {
+            --pearl-white: #ffffff;
+            --pearl-cream: #f0f0f0;
+            --text-deep: #000000;
+            --ocean-deep: #003366;
+            --ocean-mid: #0066cc;
+        }
+        
+        /* Dyslexia Font */
+        body.dyslexia-font {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Reminder Banner -->
+    <div id="reminderBanner" class="reminder-banner">
+        <p>💧 Time to hydrate! Your body is calling for refreshment. 
+        <button class="btn btn-small" onclick="dismissReminder()">Add Water</button> 
+        <button class="btn btn-small" onclick="dismissReminder()">Dismiss</button></p>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="brand">Depths to Heights</div>
+                <div class="controls">
+                    <button class="btn btn-small" onclick="toggleAccessibility()">Accessibility</button>
+                    <button class="btn btn-small" onclick="shareApp()">Share</button>
+                    <button class="btn btn-small" onclick="showHelp()">Help</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hook Section -->
+    <section class="hook-section">
+        <div class="container">
+            <h1 class="hook-title">Every sip is a step toward wellness—let's build this habit together.</h1>
+            <button class="btn btn-primary" onclick="scrollToTracking()">Start Tracking</button>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Water Level Display -->
+        <section id="mainTracking" class="section">
+            <h2 class="section-title">Today's Hydration</h2>
+            <div class="water-level-container">
+                <div class="water-level">
+                    <div class="water-fill" id="waterFill"></div>
+                </div>
+                <div class="water-stats">
+                    <div class="water-percentage" id="waterPercentage">0%</div>
+                    <div class="water-amount" id="waterAmount">0 / 2000 ml</div>
+                    <div style="margin-top: 1rem; opacity: 0.8;">
+                        <span id="waterRemaining">2000 ml remaining</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Goal Setting -->
+        <section class="section">
+            <h2 class="section-title">Set Your Daily Goal</h2>
+            <div class="goal-setting">
+                <p style="text-align: center; margin-bottom: 1rem; color: var(--ocean-mid);">Choose a daily water intake goal that works for your lifestyle</p>
+                <div class="goal-options">
+                    <div class="goal-option" onclick="setGoal(1500, this)">
+                        <div class="goal-title">Light Activity</div>
+                        <div class="goal-amount">1,500 ml</div>
+                        <div style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--ocean-mid);">~6 glasses</div>
+                    </div>
+                    <div class="goal-option selected" onclick="setGoal(2000, this)">
+                        <div class="goal-title">Moderate Activity</div>
+                        <div class="goal-amount">2,000 ml</div>
+                        <div style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--ocean-mid);">~8 glasses</div>
+                    </div>
+                    <div class="goal-option" onclick="setGoal(2500, this)">
+                        <div class="goal-title">Active Lifestyle</div>
+                        <div class="goal-amount">2,500 ml</div>
+                        <div style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--ocean-mid);">~10 glasses</div>
+                    </div>
+                    <div class="goal-option" onclick="setGoal(3000, this)">
+                        <div class="goal-title">High Activity</div>
+                        <div class="goal-amount">3,000 ml</div>
+                        <div style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--ocean-mid);">~12 glasses</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1.5rem;">
+                    <button class="btn" onclick="customGoal()">Set Custom Goal</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Add Water -->
+        <section class="section">
+            <h2 class="section-title">Add Water Intake</h2>
+            <div class="quick-add">
+                <button class="quick-add-btn" onclick="addWater(250)">
+                    <span class="quick-add-amount">250ml</span>
+                    <span class="quick-add-label">Small Glass</span>
+                </button>
+                <button class="quick-add-btn" onclick="addWater(500)">
+                    <span class="quick-add-amount">500ml</span>
+                    <span class="quick-add-label">Water Bottle</span>
+                </button>
+                <button class="quick-add-btn" onclick="addWater(750)">
+                    <span class="quick-add-amount">750ml</span>
+                    <span class="quick-add-label">Large Bottle</span>
+                </button>
+                <button class="quick-add-btn" onclick="addWater(1000)">
+                    <span class="quick-add-amount">1000ml</span>
+                    <span class="quick-add-label">Big Bottle</span>
+                </button>
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+                <button class="btn" onclick="customAmount()">Add Custom Amount</button>
+                <button class="btn" onclick="undoLastEntry()" style="margin-left: 1rem;">Undo Last</button>
+            </div>
+        </section>
+
+        <!-- Progress Stats -->
+        <section class="section">
+            <h2 class="section-title">Your Progress</h2>
+            <div class="progress-section">
+                <div class="stat-card">
+                    <div class="stat-number" id="todayCount">0</div>
+                    <div class="stat-label">Glasses Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="streakCount">0</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="weekAverage">0</div>
+                    <div class="stat-label">Week Average (%)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalIntake">0</div>
+                    <div class="stat-label">Total Liters</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Weekly Chart -->
+        <section class="section">
+            <h2 class="section-title">Weekly Hydration History</h2>
+            <div class="chart-container">
+                <div class="chart" id="weeklyChart">
+                    <!-- Chart bars will be generated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Hydration Reminders -->
+        <section class="section">
+            <h2 class="section-title">Smart Reminders</h2>
+            <div style="text-align: center;">
+                <p style="margin-bottom: 2rem; color: var(--ocean-mid);">Set gentle reminders to maintain consistent hydration throughout your day</p>
+                
+                <div style="margin: 2rem 0;">
+                    <label for="reminderInterval" style="display: block; margin-bottom: 1rem; font-weight: bold; color: var(--ocean-deep);">Reminder Frequency:</label>
+                    <select id="reminderInterval" style="padding: 0.8rem; font-size: 1rem; border-radius: 8px; border: 2px solid var(--ocean-light); background: var(--pearl-white);">
+                        <option value="0">No reminders</option>
+                        <option value="30">Every 30 minutes</option>
+                        <option value="60" selected>Every hour</option>
+                        <option value="90">Every 1.5 hours</option>
+                        <option value="120">Every 2 hours</option>
+                    </select>
+                </div>
+                
+                <div style="margin: 2rem 0;">
+                    <button class="btn" onclick="startReminders()">Start Reminders</button>
+                    <button class="btn" onclick="stopReminders()">Stop Reminders</button>
+                </div>
+                
+                <div id="reminderStatus" style="margin-top: 1rem; color: var(--ocean-mid); font-style: italic;">
+                    Reminders are off
+                </div>
+            </div>
+        </section>
+
+        <!-- Journaling Section -->
+        <section class="section">
+            <h2 class="section-title">Hydration Journal</h2>
+            <div class="journal-section">
+                <p style="margin-bottom: 1rem; color: var(--ocean-mid);">Reflect on your hydration journey. How do you feel? What patterns do you notice?</p>
+                <textarea 
+                    id="journalText" 
+                    class="journal-textarea" 
+                    placeholder="Today I noticed... My energy feels... I'm learning that..."
+                ></textarea>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <button class="btn" onclick="saveJournal()">Save Entry</button>
+                    <button class="btn" onclick="exportJournal()">Export Journal</button>
+                </div>
+                <div id="journalSaveStatus" style="margin-top: 0.5rem; text-align: center; color: var(--seaweed-green); opacity: 0;">
+                    Journal saved!
+                </div>
+            </div>
+        </section>
+
+        <!-- Notes & Sources Section -->
+        <section class="section">
+            <h2 class="section-title">Notes & Sources</h2>
+            
+            <div style="background: var(--pearl-cream); padding: 2rem; border-radius: 15px; margin: 1rem 0;">
+                <h3 style="color: var(--ocean-deep); margin-bottom: 1rem; font-family: var(--font-serif);">What The Bible Says:</h3>
+                <blockquote style="font-style: italic; color: var(--ocean-mid); margin: 1rem 0; padding-left: 1.5rem; border-left: 4px solid var(--wave-foam);">
+                    "He makes springs pour water into the ravines; it flows between the mountains. They give water to all the beasts of the field; the wild donkeys quench their thirst." - Psalm 104:10-11
+                </blockquote>
+                <blockquote style="font-style: italic; color: var(--ocean-mid); margin: 1rem 0; padding-left: 1.5rem; border-left: 4px solid var(--wave-foam);">
+                    "Jesus answered, 'Everyone who drinks this water will be thirsty again, but whoever drinks the water I give them will never thirst.'" - John 4:13-14
+                </blockquote>
+                <p>God provides water for all His creation, and Jesus uses water as a metaphor for spiritual life. Caring for our physical hydration can remind us of our deeper spiritual thirst.</p>
+            </div>
+            
+            <div style="background: var(--pearl-cream); padding: 2rem; border-radius: 15px; margin: 1rem 0;">
+                <h3 style="color: var(--ocean-deep); margin-bottom: 1rem; font-family: var(--font-serif);">Health Research Suggests:</h3>
+                <ul style="margin-left: 2rem; color: var(--ocean-mid); line-height: 1.8;">
+                    <li><strong>Cognitive function</strong> improves with proper hydration, with even mild dehydration affecting concentration and mood.</li>
+                    <li><strong>Physical performance</strong> can decline by 10-15% when dehydrated by just 2% of body weight.</li>
+                    <li><strong>Digestive health</strong> relies on adequate water intake for proper nutrient absorption and waste elimination.</li>
+                    <li><strong>Temperature regulation</strong> through sweating requires sufficient fluid reserves, especially during activity or warm weather.</li>
+                    <li><strong>Joint lubrication</strong> and tissue health depend on consistent hydration for optimal function.</li>
+                </ul>
+                <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-deep);">
+                    <em>Sources: American Journal of Clinical Nutrition, Journal of Nutrition, Mayo Clinic Guidelines</em>
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Donation Note -->
+    <div class="container">
+        <div class="donation-note">
+            <h3 style="color: var(--ocean-deep); margin-bottom: 1rem;">Support This Work</h3>
+            <p style="margin-bottom: 1rem;">If this app has helped you build better hydration habits, consider supporting our mission to create more wellness tools.</p>
+            <a href="https://www.paypal.com/donate/?hosted_button_id=8GRE7B8C3TP2U" class="paypal-link" target="_blank" rel="noopener">Donate via PayPal</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div>
+            <p><strong>Made by Justin | Depths to Heights</strong></p>
+            <p style="margin: 1rem 0;">depthstoheights@gmail.com</p>
+            <p style="font-size: 0.9rem; opacity: 0.8;">This app provides general wellness guidance and is not medical advice. Consult healthcare professionals for specific hydration needs or health concerns.</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">U.S.: Call/Text 988 for crisis support; elsewhere: use your local emergency number.</p>
+        </div>
+    </footer>
+
+    <script>
+        // App State
+        let dailyGoal = parseInt(localStorage.getItem('hydrationGoal') || '2000');
+        let dailyIntake = parseInt(localStorage.getItem('hydrationToday') || '0');
+        let hydrationLog = JSON.parse(localStorage.getItem('hydrationLog') || '[]');
+        let journalEntries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
+        let reminderTimeoutId = null;
+        
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+        
+        function initializeApp() {
+            // Reset daily intake if it's a new day
+            const today = new Date().toISOString().split('T')[0];
+            const lastDate = localStorage.getItem('lastHydrationDate');
+            
+            if (lastDate !== today) {
+                dailyIntake = 0;
+                localStorage.setItem('hydrationToday', '0');
+                localStorage.setItem('lastHydrationDate', today);
+            }
+            
+            // Load journal
+            const savedJournal = localStorage.getItem('currentJournal') || '';
+            document.getElementById('journalText').value = savedJournal;
+            
+            // Set up journal auto-save
+            document.getElementById('journalText').addEventListener('input', function() {
+                localStorage.setItem('currentJournal', this.value);
+            });
+            
+            updateDisplay();
+            updateStats();
+            generateWeeklyChart();
+        }
+        
+        // Water tracking functions
+        function addWater(amount) {
+            dailyIntake += amount;
+            localStorage.setItem('hydrationToday', dailyIntake.toString());
+            
+            // Log the entry
+            const now = new Date();
+            const logEntry = {
+                timestamp: now.toISOString(),
+                date: now.toISOString().split('T')[0],
+                amount: amount,
+                type: 'manual'
+            };
+            
+            hydrationLog.push(logEntry);
+            localStorage.setItem('hydrationLog', JSON.stringify(hydrationLog));
+            
+            updateDisplay();
+            updateStats();
+            generateWeeklyChart();
+            
+            // Check if goal reached
+            if (dailyIntake >= dailyGoal && (dailyIntake - amount) < dailyGoal) {
+                setTimeout(() => {
+                    showCelebration();
+                }, 500);
+            }
+        }
+        
+        function undoLastEntry() {
+            if (hydrationLog.length === 0) return;
+            
+            const today = new Date().toISOString().split('T')[0];
+            const todayEntries = hydrationLog.filter(entry => entry.date === today);
+            
+            if (todayEntries.length === 0) return;
+            
+            const lastEntry = todayEntries[todayEntries.length - 1];
+            dailyIntake -= lastEntry.amount;
+            localStorage.setItem('hydrationToday', dailyIntake.toString());
+            
+            // Remove from log
+            const index = hydrationLog.findIndex(entry => entry.timestamp === lastEntry.timestamp);
+            if (index > -1) {
+                hydrationLog.splice(index, 1);
+                localStorage.setItem('hydrationLog', JSON.stringify(hydrationLog));
+            }
+            
+            updateDisplay();
+            updateStats();
+            generateWeeklyChart();
+            
+            // Show feedback
+            const banner = document.getElementById('reminderBanner');
+            banner.innerHTML = '<p>✨ Last entry removed! <button class="btn btn-small" onclick="dismissReminder()">Dismiss</button></p>';
+            banner.classList.add('show');
+        }
+        
+        function setGoal(amount, element) {
+            dailyGoal = amount;
+            localStorage.setItem('hydrationGoal', amount.toString());
+            
+            // Update UI
+            document.querySelectorAll('.goal-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            element.classList.add('selected');
+            
+            updateDisplay();
+        }
+        
+        function customGoal() {
+            const amount = prompt('Enter your daily hydration goal in ml (500-5000):', dailyGoal);
+            if (amount && amount >= 500 && amount <= 5000) {
+                dailyGoal = parseInt(amount);
+                localStorage.setItem('hydrationGoal', amount.toString());
+                updateDisplay();
+                
+                // Update goal selection
+                document.querySelectorAll('.goal-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+            }
+        }
+        
+        function customAmount() {
+            const amount = prompt('How much water did you drink (in ml)?', '250');
+            if (amount && amount > 0 && amount <= 2000) {
+                addWater(parseInt(amount));
+            }
+        }
+        
+        function updateDisplay() {
+            const percentage = Math.min(100, Math.round((dailyIntake / dailyGoal) * 100));
+            const remaining = Math.max(0, dailyGoal - dailyIntake);
+            
+            // Update water level
+            const waterFill = document.getElementById('waterFill');
+            waterFill.style.height = percentage + '%';
+            
+            // Update text displays
+            document.getElementById('waterPercentage').textContent = percentage + '%';
+            document.getElementById('waterAmount').textContent = `${dailyIntake} / ${dailyGoal} ml`;
+            document.getElementById('waterRemaining').textContent = remaining > 0 ? 
+                `${remaining} ml remaining` : 'Goal achieved! 🎉';
+        }
+        
+        function updateStats() {
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Today's glasses (assuming 250ml per glass)
+            const glassesToday = Math.round(dailyIntake / 250);
+            document.getElementById('todayCount').textContent = glassesToday;
+            
+            // Calculate streak
+            let streak = 0;
+            const sortedDates = [...new Set(hydrationLog.map(log => log.date))].sort().reverse();
+            
+            for (let i = 0; i < sortedDates.length; i++) {
+                const date = new Date(sortedDates[i]);
+                const expectedDate = new Date();
+                expectedDate.setDate(expectedDate.getDate() - i);
+                
+                if (date.toISOString().split('T')[0] === expectedDate.toISOString().split('T')[0]) {
+                    // Check if goal was met on this day
+                    const dayTotal = hydrationLog
+                        .filter(entry => entry.date === sortedDates[i])
+                        .reduce((sum, entry) => sum + entry.amount, 0);
+                    
+                    if (dayTotal >= dailyGoal) {
+                        streak++;
+                    } else if (sortedDates[i] !== today) {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+            
+            document.getElementById('streakCount').textContent = streak;
+            
+            // Week average percentage
+            const weekStart = new Date();
+            weekStart.setDate(weekStart.getDate() - 6);
+            const weekStartStr = weekStart.toISOString().split('T')[0];
+            
+            const weekEntries = hydrationLog.filter(entry => entry.date >= weekStartStr);
+            const weekDays = {};
+            
+            weekEntries.forEach(entry => {
+                if (!weekDays[entry.date]) weekDays[entry.date] = 0;
+                weekDays[entry.date] += entry.amount;
+            });
+            
+            const weekPercentages = Object.values(weekDays).map(total => 
+                Math.min(100, (total / dailyGoal) * 100)
+            );
+            
+            const weekAverage = weekPercentages.length > 0 ? 
+                Math.round(weekPercentages.reduce((a, b) => a + b, 0) / weekPercentages.length) : 0;
+            
+            document.getElementById('weekAverage').textContent = weekAverage;
+            
+            // Total liters
+            const totalMl = hydrationLog.reduce((sum, entry) => sum + entry.amount, 0);
+            const totalLiters = (totalMl / 1000).toFixed(1);
+            document.getElementById('totalIntake').textContent = totalLiters;
+        }
+        
+        function generateWeeklyChart() {
+            const chart = document.getElementById('weeklyChart');
+            chart.innerHTML = '';
+            
+            const today = new Date();
+            const days = [];
+            
+            // Generate last 7 days
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                days.push(date);
+            }
+            
+            days.forEach(date => {
+                const dateStr = date.toISOString().split('T')[0];
+                const dayTotal = hydrationLog
+                    .filter(entry => entry.date === dateStr)
+                    .reduce((sum, entry) => sum + entry.amount, 0);
+                
+                const percentage = Math.min(100, (dayTotal / dailyGoal) * 100);
+                const height = Math.max(5, percentage);
+                
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.height = height + '%';
+                bar.title = `${date.toLocaleDateString('en', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric' 
+                })}: ${dayTotal}ml (${Math.round(percentage)}%)`;
+                
+                // Color coding based on goal achievement
+                if (percentage >= 100) {
+                    bar.style.background = 'linear-gradient(180deg, var(--seaweed-green), var(--ocean-light))';
+                } else if (percentage >= 75) {
+                    bar.style.background = 'linear-gradient(180deg, var(--wave-foam), var(--ocean-light))';
+                } else {
+                    bar.style.background = 'linear-gradient(180deg, var(--coral-accent), var(--ocean-mid))';
+                }
+                
+                const label = document.createElement('div');
+                label.className = 'chart-label';
+                label.textContent = date.toLocaleDateString('en', { weekday: 'short' });
+                
+                bar.appendChild(label);
+                chart.appendChild(bar);
+            });
+        }
+        
+        function showCelebration() {
+            const banner = document.getElementById('reminderBanner');
+            banner.innerHTML = '<p>🎉 Congratulations! You\'ve reached your daily hydration goal! <button class="btn btn-small" onclick="dismissReminder()">Celebrate</button></p>';
+            banner.style.background = 'linear-gradient(135deg, var(--seaweed-green), #16a085)';
+            banner.classList.add('show');
+        }
+        
+        // Reminder functions
+        function startReminders() {
+            const interval = parseInt(document.getElementById('reminderInterval').value);
+            if (interval === 0) return;
+            
+            stopReminders();
+            
+            function scheduleNextReminder() {
+                reminderTimeoutId = setTimeout(() => {
+                    showReminder();
+                    scheduleNextReminder();
+                }, interval * 60 * 1000);
+            }
+            
+            scheduleNextReminder();
+            updateReminderStatus();
+        }
+        
+        function stopReminders() {
+            if (reminderTimeoutId) {
+                clearTimeout(reminderTimeoutId);
+                reminderTimeoutId = null;
+            }
+            updateReminderStatus();
+        }
+        
+        function showReminder() {
+            const remaining = dailyGoal - dailyIntake;
+            const banner = document.getElementById('reminderBanner');
+            banner.innerHTML = `<p>💧 Time to hydrate! ${remaining > 0 ? remaining + 'ml remaining' : 'Goal achieved!'} <button class="btn btn-small" onclick="dismissReminder()">Add Water</button> <button class="btn btn-small" onclick="dismissReminder()">Dismiss</button></p>`;
+            banner.style.background = 'linear-gradient(135deg, var(--coral-accent), #ff5252)';
+            banner.classList.add('show');
+        }
+        
+        function dismissReminder() {
+            const banner = document.getElementById('reminderBanner');
+            banner.classList.remove('show');
+        }
+        
+        function updateReminderStatus() {
+            const interval = parseInt(document.getElementById('reminderInterval').value);
+            const status = document.getElementById('reminderStatus');
+            
+            if (interval === 0 || !reminderTimeoutId) {
+                status.textContent = 'Reminders are off';
+            } else {
+                const hours = Math.floor(interval / 60);
+                const minutes = interval % 60;
+                let timeText = '';
+                
+                if (hours > 0) {
+                    timeText += hours + ' hour' + (hours > 1 ? 's' : '');
+                    if (minutes > 0) timeText += ' ' + minutes + ' minutes';
+                } else {
+                    timeText = minutes + ' minutes';
+                }
+                
+                status.textContent = `Reminders every ${timeText}`;
+            }
+        }
+        
+        // Journal functions
+        function saveJournal() {
+            const text = document.getElementById('journalText').value.trim();
+            if (!text) return;
+            
+            const now = new Date();
+            const entry = {
+                timestamp: now.toISOString(),
+                date: now.toISOString().split('T')[0],
+                text: text
+            };
+            
+            journalEntries.push(entry);
+            localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
+            localStorage.setItem('currentJournal', '');
+            
+            // Show save confirmation
+            const status = document.getElementById('journalSaveStatus');
+            status.style.opacity = '1';
+            setTimeout(() => {
+                status.style.opacity = '0';
+            }, 2000);
+            
+            // Clear textarea
+            document.getElementById('journalText').value = '';
+        }
+        
+        function exportJournal() {
+            if (journalEntries.length === 0) {
+                alert('No journal entries to export yet.');
+                return;
+            }
+            
+            const data = {
+                exportDate: new Date().toISOString(),
+                entries: journalEntries,
+                totalEntries: journalEntries.length
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `hydration-journal-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Utility functions
+        function scrollToTracking() {
+            document.getElementById('mainTracking').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        function shareApp() {
+            const shareData = {
+                title: 'Hydration Habit Builder',
+                text: 'Build healthy hydration habits with this reflective water tracking app!',
+                url: window.location.href
+            };
+            
+            if (navigator.share) {
+                navigator.share(shareData);
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('App link copied to clipboard!');
+                }).catch(() => {
+                    alert('Share URL: ' + window.location.href);
+                });
+            }
+        }
+        
+        function toggleAccessibility() {
+            const currentMode = document.body.classList.contains('reading-mode');
+            if (currentMode) {
+                document.body.classList.remove('reading-mode');
+                alert('Reading mode disabled');
+            } else {
+                document.body.classList.add('reading-mode');
+                alert('Reading mode enabled - optimized text width and larger font size');
+            }
+        }
+        
+        function showHelp() {
+            alert(`Hydration Habit Builder Help:
+
+• Set a daily goal that matches your activity level
+• Use quick-add buttons to log water throughout the day
+• Track progress with the visual water level and charts
+• Set reminders to maintain consistent habits
+• Use the journal to reflect on your hydration journey
+
+Tips:
+• Start your day with a glass of water
+• Keep water visible as a reminder
+• Increase intake during exercise or hot weather
+• Listen to your body's thirst signals
+
+Crisis Support: U.S. - Call/Text 988; Elsewhere - Use local emergency number`);
+        }
+    </script>
+</body>
+</html>

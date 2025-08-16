@@ -1152,5 +1152,13 @@ Tips:
 Crisis Support: U.S. - Call/Text 988; Elsewhere - Use local emergency number`);
         }
     </script>
+    <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service Worker registered'))
+      .catch(error => console.error('Service Worker registration failed:', error));
+  }
+</script>
+
 </body>
 </html>
